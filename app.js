@@ -11,22 +11,36 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // setting up passport.js
-const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
+const expressSession = require('express-session');
+const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "supersecretkey",
-    resave: false,
-    saveUninitialized: false,
+  expressSession({
+    cookie: {
+     maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+    },
+    secret: 'a santa at nasa',
+    resave: true,
+    saveUninitialized: true,
+    store: new PrismaSessionStore(
+      new PrismaClient(),
+      {
+        checkPeriod: 2 * 60 * 1000,  //ms
+        dbRecordIdIsSessionId: true,
+        dbRecordIdFunction: undefined,
+      }
+    )
   })
 );
+
 app.use(passport.session());
 
+// Passport.js local security
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
