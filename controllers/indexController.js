@@ -3,11 +3,19 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const passport = require("passport");
 
-const getIndex = (req, res, next) => {
-  res.render("index", { user: req.user });
+const getIndex = async (req, res, next) => {
+  if (req.user) {
+    const userWithMessages = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: { messages: true },
+    });
+    res.render("index", { user: userWithMessages });  
+  } else {
+    res.render("index", { user: req.user });
+  }
 };
 
-const postSignUp = (req, res, next) => {
+const postSignUp = async (req, res, next) => {
   try {
     if (req.body.password !== req.body.cpassword) {
       return res.status(400).sent(`Passwords don't match`);
@@ -28,7 +36,7 @@ const postSignUp = (req, res, next) => {
   }
 };
 
-const postLogIn = (req, res, next) => {
+const postLogIn = async (req, res, next) => {
   try {
     passport.authenticate("local", {
       successRedirect: "/",
@@ -40,4 +48,33 @@ const postLogIn = (req, res, next) => {
   }
 };
 
-module.exports = { getIndex, postLogIn, postSignUp };
+const getMessage = async (req, res, next) => {
+  try {
+    const allUsers = await prisma.user.findMany({});
+    res.render('createMessage', { user: req.user, users: allUsers });
+  } catch(err) {
+    console.log(err);
+    return next(err);
+  }
+}
+
+const postMessage = async (req, res, next) => {
+  try {
+    const recipientId = parseInt(req.body.recipient);
+
+    await prisma.message.create({
+      data: {
+        name: req.body.name,
+        text: req.body.text,
+        userId: recipientId,
+      }
+    });
+
+    res.redirect('/');
+  } catch(err) {
+    console.log(err);
+    return next(err);
+  }
+}
+
+module.exports = { getIndex, postLogIn, postSignUp, getMessage, postMessage };
