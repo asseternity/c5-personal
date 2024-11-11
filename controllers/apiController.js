@@ -9,10 +9,9 @@ const getIndex = async (req, res, next) => {
       where: { id: req.user.id },
       include: { messages: true },
     });
-    res.render("index", { user: userWithMessages });
-  } else {
-    res.render("index", { user: req.user });
+    res.json({ user: userWithMessages });
   }
+  res.json({ user: req.user });
 };
 
 const postSignUp = async (req, res, next) => {
@@ -28,7 +27,7 @@ const postSignUp = async (req, res, next) => {
           isAdmin: false,
         },
       });
-      res.redirect("/");
+      res.json({ message: "Success" });
     });
   } catch (err) {
     console.log(err);
@@ -38,9 +37,12 @@ const postSignUp = async (req, res, next) => {
 
 const postLogIn = async (req, res, next) => {
   try {
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/",
+    passport.authenticate("local", (err, user, info) => {
+      if (user) {
+        res.json({ user });
+      } else {
+        res.status(401).json({ error: "Authentication failed" });
+      }
     })(req, res, next);
   } catch (err) {
     console.log(err);
@@ -51,7 +53,7 @@ const postLogIn = async (req, res, next) => {
 const getMessage = async (req, res, next) => {
   try {
     const allUsers = await prisma.user.findMany({});
-    res.render("createMessage", { user: req.user, users: allUsers });
+    res.json({ user: req.user, users: allUsers });
   } catch (err) {
     console.log(err);
     return next(err);
@@ -68,7 +70,7 @@ const postMessage = async (req, res, next) => {
         userId: recipientId,
       },
     });
-    res.redirect("/");
+    res.json({ message: "Success" });
   } catch (err) {
     console.log(err);
     return next(err);
