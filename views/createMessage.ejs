@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soleira Prestigia - Newsletter</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Soleira Prestigia - Newsletter</title>
-</head>
+  <body>
+    <% if (user.isAdmin) { %>
+    <h1><%= user.username %> is an Admin. Access Granted.</h1>
+    <form action="/message" method="POST">
+      <label for="name">Message title</label>
+      <input type="text" id="name" name="name" />
+      <label for="text">Message text</label>
+      <input type="text" id="text" name="text" />
+      <% for (let i = 0; i < users.length; i++) { %>
+      <label>
+        <input type="checkbox" name="recipientId" value="<%= users[i].id %>" />
+        <%= users[i].username %>
+      </label>
+      <% } %>
+      <button>Send message</button>
+    </form>
+    <a href="/">Back home</a>
 
-<body>
-  <% if (user.isAdmin) { %>
-  <h1><%= user.username %> is an Admin. Access Granted.</h1>
-  <form action="/message" method="POST">
-    <label for="name">Message title</label>
-    <input type="text" id="name" name="name" />
-    <label for="text">Message text</label>
-    <input type="text" id="text" name="text" />
-    <% for (let i = 0; i < users.length; i++) { %>
-    <label>
-      <input type="radio" name="recipient" value="<%= users[i].id %>" required />
-      <%= users[i].username %>
-    </label>
+    <% } else { %>
+    <h1>You are not logged in, or you are not an admin.</h1>
+    <a href="/">Back home</a>
     <% } %>
-    <button>Send message</button>
-  </form>
-  <a href="/">Back home</a>
-
-  <% } else { %>
-  <h1>You are not logged in, or you are not an admin.</h1>
-  <a href="/">Back home</a>
-  <% } %>
-</body>
-
+  </body>
 </html>
