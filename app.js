@@ -16,25 +16,22 @@ const LocalStrategy = require("passport-local").Strategy;
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
-const expressSession = require('express-session');
-const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const expressSession = require("express-session");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 
 app.use(
   expressSession({
     cookie: {
-     maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+      maxAge: 7 * 24 * 60 * 60 * 1000, // ms
     },
-    secret: 'a santa at nasa',
+    secret: "a santa at nasa",
     resave: true,
     saveUninitialized: true,
-    store: new PrismaSessionStore(
-      new PrismaClient(),
-      {
-        checkPeriod: 2 * 60 * 1000,  //ms
-        dbRecordIdIsSessionId: true,
-        dbRecordIdFunction: undefined,
-      }
-    )
+    store: new PrismaSessionStore(new PrismaClient(), {
+      checkPeriod: 2 * 60 * 1000, //ms
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
   })
 );
 
@@ -81,6 +78,9 @@ passport.deserializeUser(async (id, done) => {
 // mounting
 const indexRoute = require("./routes/indexRoute");
 app.use("/", indexRoute);
+
+const apiRoute = require("./routes/apiRoute");
+app.use("/", apiRoute);
 
 // launch
 const port = process.env.PORT || 3000;

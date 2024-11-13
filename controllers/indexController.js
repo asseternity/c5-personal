@@ -59,16 +59,44 @@ const getMessage = async (req, res, next) => {
 };
 
 const postMessage = async (req, res, next) => {
+  const recipientIds = req.body.recipientId;
+
+  if (!recipientIds || recipientIds.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "At least one recipient must be selected." });
+  }
+
+  if (!req.body.name || !req.body.text) {
+    return res
+      .status(400)
+      .json({ message: "Please write a title and a text of the message." });
+  }
+
   try {
-    const recipientId = parseInt(req.body.recipient);
-    await prisma.message.create({
-      data: {
-        name: req.body.name,
-        text: req.body.text,
-        userId: recipientId,
-      },
-    });
-    res.redirect("/");
+    if (Array.isArray(req.body.recipientId)) {
+      for (let i = 0; i < recipientIds.length; i++) {
+        const correctRecipientId = parseInt(recipientIds[i]);
+        await prisma.message.create({
+          data: {
+            name: req.body.name,
+            text: req.body.text,
+            userId: correctRecipientId,
+          },
+        });
+      }
+      res.json({ message: "Success" });
+    } else {
+      const recipientId = parseInt(req.body.recipientId);
+      await prisma.message.create({
+        data: {
+          name: req.body.name,
+          text: req.body.text,
+          userId: recipientId,
+        },
+      });
+      res.redirect("/");
+    }
   } catch (err) {
     console.log(err);
     return next(err);
