@@ -80,7 +80,7 @@ const indexRoute = require("./routes/indexRoute");
 app.use("/", indexRoute);
 
 const apiRoute = require("./routes/apiRoute");
-app.use("/", apiRoute);
+app.use("/api", apiRoute);
 
 // launch
 const port = process.env.PORT || 3000;
