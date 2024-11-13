@@ -105,4 +105,28 @@ const postMessage = async (req, res, next) => {
   }
 };
 
-module.exports = { getIndex, postLogIn, postSignUp, getMessage, postMessage };
+const getAllUserMessages = async (req, res, next) => {
+  if (req.user) {
+    try {
+      const allMessages = await prisma.message.findMany({
+        where: {
+          userId: req.user.id,
+        },
+      });
+      return res.json(allMessages);
+    } catch (err) {
+      return next(err);
+    }
+  } else {
+    return res.status(401).sent(`You are not authenticated`);
+  }
+};
+
+module.exports = {
+  getIndex,
+  postLogIn,
+  postSignUp,
+  getMessage,
+  postMessage,
+  getAllUserMessages,
+};
