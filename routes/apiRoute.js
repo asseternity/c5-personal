@@ -10,6 +10,7 @@ const corsOptions = {
 };
 
 apiRoute.use(cors(corsOptions));
+apiRoute.options("*", cors(corsOptions));
 
 apiRoute.get("/", apiController.getIndex);
 apiRoute.post("/sign-up", apiController.postSignUp);
