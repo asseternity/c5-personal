@@ -107,7 +107,7 @@ const postMessage = async (req, res, next) => {
 };
 
 const getAllUserMessages = async (req, res, next) => {
-  console.log("Fetching all messages for user:", req.body);
+  console.log("Fetching all messages for user:", req.user);
 
   if (req.user) {
     try {
