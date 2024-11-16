@@ -40,7 +40,7 @@ const postLogIn = async (req, res, next) => {
   try {
     passport.authenticate("local", (err, user, info) => {
       if (user) {
-        res.json({ user });
+        res.json(user);
       } else {
         res.status(401).json({ error: "Authentication failed" });
       }
