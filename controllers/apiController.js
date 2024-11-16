@@ -39,11 +39,20 @@ const postLogIn = async (req, res, next) => {
   console.log("Log-in request received:", req.body);
   try {
     passport.authenticate("local", (err, user, info) => {
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(401).json({ error: "Authentication failed" });
+      if (err) {
+        return next(err); // Handle errors properly
       }
+      if (!user) {
+        return res.status(401).json({ error: "Authentication failed" });
+      }
+      // Log the user in and create the session
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Login successful; send the user data
+        res.json(user);
+      });
     })(req, res, next);
   } catch (err) {
     console.log(err);
