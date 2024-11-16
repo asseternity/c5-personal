@@ -36,6 +36,7 @@ const postSignUp = async (req, res, next) => {
 };
 
 const postLogIn = async (req, res, next) => {
+  console.log("Log-in request received:", req.body);
   try {
     passport.authenticate("local", (err, user, info) => {
       if (user) {
@@ -106,6 +107,8 @@ const postMessage = async (req, res, next) => {
 };
 
 const getAllUserMessages = async (req, res, next) => {
+  console.log("Fetching all messages for user:", req.body);
+
   if (req.user) {
     try {
       const allMessages = await prisma.message.findMany({
