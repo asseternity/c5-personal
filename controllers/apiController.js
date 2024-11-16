@@ -17,7 +17,7 @@ const getIndex = async (req, res, next) => {
 const postSignUp = async (req, res, next) => {
   try {
     if (req.body.password !== req.body.cpassword) {
-      return res.status(400).sent(`Passwords don't match`);
+      return res.status(400).send(`Passwords don't match`);
     }
     bcryptjs.hash(req.body.password, 10, async (err, hashedPassword) => {
       await prisma.user.create({
@@ -121,7 +121,7 @@ const getAllUserMessages = async (req, res, next) => {
       return next(err);
     }
   } else {
-    return res.status(401).sent(`You are not authenticated`);
+    return res.status(401).send(`You are not authenticated`);
   }
 };
 
