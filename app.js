@@ -3,6 +3,16 @@ require("dotenv").config();
 const express = require("express");
 const path = require("node:path");
 const app = express();
+const cors = require("cors");
+
+// set up cors
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "POST"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // settings
 app.set("views", path.join(__dirname, "views"));
@@ -22,15 +32,18 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 app.use(
   expressSession({
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // ms
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: true, // Set to true if using HTTPS (which you are on Railway)
+      httpOnly: true, // Prevent access from JavaScript
+      sameSite: "None", // Required for cross-origin cookies
+      domain: ".railway.app", // Allow cookie to be set for all subdomains of railway.app
     },
     secret: "a santa at nasa",
     resave: true,
     saveUninitialized: true,
-    store: new PrismaSessionStore(new PrismaClient(), {
-      checkPeriod: 2 * 60 * 1000, //ms
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000, // 2 minutes
       dbRecordIdIsSessionId: true,
-      dbRecordIdFunction: undefined,
     }),
   })
 );

@@ -50,6 +50,9 @@ const postLogIn = async (req, res, next) => {
         if (err) {
           return next(err);
         }
+        // Log user
+        console.log("Session Data:", req.session);
+        console.log("User Data:", req.user);
         // Login successful; send the user data
         res.json(user);
       });
