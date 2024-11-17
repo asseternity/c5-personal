@@ -9,19 +9,7 @@ const corsOptions = {
   credentials: true,
 };
 
-// Apply CORS middleware globally to all routes
 apiRoute.use(cors(corsOptions));
-
-// Handle OPTIONS preflight requests
-apiRoute.options("*", (req, res, next) => {
-  console.log("Preflight OPTIONS request received for:", req.url);
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.status(200).end(); // Respond with status 200 to preflight
-  next(); // Continue processing if needed
-});
 
 apiRoute.get("/", apiController.getIndex);
 apiRoute.post("/sign-up", apiController.postSignUp);
