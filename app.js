@@ -33,10 +33,10 @@ app.use(
   expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      secure: true, // Set to true if using HTTPS (which you are on Railway)
+      secure: false, // Set to true after frontend is hosted
       httpOnly: true, // Prevent access from JavaScript
       sameSite: "None", // Required for cross-origin cookies
-      domain: ".railway.app", // Allow cookie to be set for all subdomains of railway.app
+      // domain: ".railway.app", // Allow cookie to be set for all subdomains of railway.app - return for production
     },
     secret: "a santa at nasa",
     resave: true,
