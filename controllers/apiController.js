@@ -4,14 +4,14 @@ const prisma = new PrismaClient();
 const passport = require("passport");
 
 const getIndex = async (req, res, next) => {
-  if (req.user) {
+  if (req.body.user) {
     const userWithMessages = await prisma.user.findUnique({
-      where: { id: req.user.id },
+      where: { id: req.body.user.id },
       include: { messages: true },
     });
     res.json({ user: userWithMessages });
   }
-  res.json({ user: req.user });
+  res.json({ user: req.body.user });
 };
 
 const postSignUp = async (req, res, next) => {
@@ -66,7 +66,7 @@ const postLogIn = async (req, res, next) => {
 const getMessage = async (req, res, next) => {
   try {
     const allUsers = await prisma.user.findMany({});
-    res.json({ user: req.user, users: allUsers });
+    res.json({ user: req.body.user, users: allUsers });
   } catch (err) {
     console.log(err);
     return next(err);
@@ -119,13 +119,13 @@ const postMessage = async (req, res, next) => {
 };
 
 const getAllUserMessages = async (req, res, next) => {
-  console.log("Fetching all messages for user:", req.user);
+  console.log("Fetching all messages for user:", req.body.user);
 
-  if (req.user) {
+  if (req.body.user) {
     try {
       const allMessages = await prisma.message.findMany({
         where: {
-          userId: req.user.id,
+          userId: req.body.user.id,
         },
       });
       return res.json(allMessages);
