@@ -7,7 +7,7 @@ const cors = require("cors");
 
 // set up cors
 const corsOptions = {
-  origin: true,
+  origin: "https://asseternity.github.io/c5-personal-react/",
   methods: ["GET", "POST"],
   credentials: true,
 };
