@@ -36,7 +36,7 @@ app.use(
   expressSession({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      secure: false,
+      secure: true,
       httpOnly: true, // Prevent access from JavaScript
       sameSite: "None", // Required for cross-origin cookies
     },
