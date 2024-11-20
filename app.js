@@ -7,7 +7,10 @@ const cors = require("cors");
 
 // set up cors
 const corsOptions = {
-  origin: "https://asseternity.github.io",
+  origin: [
+    "https://asseternity.github.io",
+    "https://c5-personal-production.up.railway.app",
+  ],
   methods: ["GET", "POST"],
   credentials: true,
 };
