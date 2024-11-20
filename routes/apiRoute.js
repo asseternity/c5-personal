@@ -10,9 +10,11 @@ const corsOptions = {
     "https://c5-personal-production.up.railway.app",
   ],
   methods: ["GET", "POST"],
+  credentials: true,
 };
 
 apiRoute.use(cors(corsOptions));
+apiRoute.options("*", cors(corsOptions));
 
 apiRoute.get("/", apiController.getIndex);
 apiRoute.post("/sign-up", apiController.postSignUp);
