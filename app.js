@@ -12,7 +12,6 @@ const corsOptions = {
     "https://c5-personal-production.up.railway.app",
   ],
   methods: ["GET", "POST"],
-  credentials: true,
 };
 
 app.use(cors(corsOptions));
