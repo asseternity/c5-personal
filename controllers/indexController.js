@@ -36,16 +36,23 @@ const postSignUp = async (req, res, next) => {
   }
 };
 
-const postLogIn = async (req, res, next) => {
-  try {
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/",
-    })(req, res, next);
-  } catch (err) {
-    console.log(err);
-    return next(err);
-  }
+const postLogIn = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err); // Handle unexpected errors
+    }
+    if (!user) {
+      // Handle login failure
+      return res.redirect("/?error=Invalid credentials");
+    }
+    // Log the user in and establish the session
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.redirect("/"); // Redirect on success
+    });
+  })(req, res, next);
 };
 
 const getMessage = async (req, res, next) => {
