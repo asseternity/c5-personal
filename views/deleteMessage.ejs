@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Soleira Prestigia - Newsletter</title>
-  </head>
 
-  <body>
-    <% if (user.isAdmin) { %>
-    <h1>Welcome back, <%= user.username %></h1>
-    <% for (let i = 0; i < allUsers.length; i++) { %>
-    <ul>
-      <% if (Array.isArray(allUsers[i].messages)) { %> <% for (let j = 0; j <
-      allUsers[i].messages.length; j++) { %>
-      <li>
-        To: <%= allUsers[i].username %> | Title: <%=
-        allUsers[i].messages[j].name %> | <%= allUsers[i].messages[j].text %>
-        <form
-          action="/deleteMessage/<%= allUsers[i].messages[j].id %>"
-          method="POST"
-          style="display: inline"
-        >
-          <button type="submit">Delete</button>
-        </form>
-      </li>
-      <% } %> <% } %>
-    </ul>
-    <a href="/">Back home</a>
-    <% } %> <% } else { %>
-    <h2>You do not have admin access.</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soleira Prestigia - Newsletter</title>
+</head>
+
+<body>
+  <% if (user.isAdmin) { %>
+  <h1><%= user.username %> is an Admin. Access Granted.</h1>
+  <% for (let i = 0; i < allUsers.length; i++) { %>
+  <ul>
+    <% if (Array.isArray(allUsers[i].messages)) { %>
+    <% for (let j = 0; j < allUsers[i].messages.length; j++) { %>
+    <li>
+      To: <%= allUsers[i].username %> | Title: <%= allUsers[i].messages[j].name %> | <%= allUsers[i].messages[j].text %>
+      <form action="/deleteMessage/<%= allUsers[i].messages[j].id %>" method="POST" style="display: inline">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
     <% } %>
-  </body>
+    <% } %>
+  </ul>
+  <% } %>
+  <a href="/">Back home</a>
+  <% } else { %>
+  <h2>You do not have admin access.</h2>
+  <% } %>
+</body>
+
 </html>
