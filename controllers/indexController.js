@@ -115,7 +115,11 @@ const postMessage = async (req, res, next) => {
 const getDeleteMessage = async (req, res, next) => {
   if (req.user.isAdmin) {
     try {
-      const allUsers = await prisma.user.findMany();
+      const allUsers = await prisma.user.findMany({
+        include: {
+          messages: true,
+        }
+      });
       res.render("deleteMessage", { user: req.user, allUsers: allUsers });
     } catch (err) {
       return next(err);
