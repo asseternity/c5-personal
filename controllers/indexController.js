@@ -132,10 +132,10 @@ const getDeleteMessage = async (req, res, next) => {
 const postDeleteMessage = async (req, res, next) => {
   if (req.user.isAdmin) {
     try {
-      const { id } = req.params;
+      const messageId = parseInt(req.params.messageId);
       await prisma.message.delete({
         where: {
-          id: parseInt(id, 10), // Convert ID to integer if needed
+          id: messageId,
         },
       });
       res.redirect("/deleteMessage");
