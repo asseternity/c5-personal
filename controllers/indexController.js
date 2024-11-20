@@ -112,4 +112,43 @@ const postMessage = async (req, res, next) => {
   }
 };
 
-module.exports = { getIndex, postLogIn, postSignUp, getMessage, postMessage };
+const getDeleteMessage = async (req, res, next) => {
+  if (req.user.isAdmin) {
+    try {
+      const allUsers = await prisma.user.findMany();
+      res.render("deleteMessage", { user: req.user, allUsers: allUsers });
+    } catch (err) {
+      return next(err);
+    }
+  } else {
+    return res.status(401).json({ message: "Unauthorized." });
+  }
+};
+
+const postDeleteMessage = async (req, res, next) => {
+  if (req.user.isAdmin) {
+    try {
+      const { id } = req.params;
+      await prisma.message.delete({
+        where: {
+          id: parseInt(id, 10), // Convert ID to integer if needed
+        },
+      });
+      res.redirect("/deleteMessage");
+    } catch (err) {
+      return next(err);
+    }
+  } else {
+    return res.status(401).json({ message: "Unauthorized." });
+  }
+};
+
+module.exports = {
+  getIndex,
+  postLogIn,
+  postSignUp,
+  getMessage,
+  postMessage,
+  getDeleteMessage,
+  postDeleteMessage,
+};
