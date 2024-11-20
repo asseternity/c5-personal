@@ -50,6 +50,8 @@ const postLogIn = (req, res, next) => {
       if (err) {
         return next(err);
       }
+      console.log("Logged in user is: ");
+      console.log(req.user);
       return res.redirect("/"); // Redirect on success
     });
   })(req, res, next);
