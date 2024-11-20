@@ -3,18 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const path = require("node:path");
 const app = express();
-const cors = require("cors");
-
-// set up cors
-const corsOptions = {
-  origin: [
-    "https://asseternity.github.io",
-    "https://c5-personal-production.up.railway.app",
-  ],
-  methods: ["GET", "POST"],
-};
-
-app.use(cors(corsOptions));
 
 // settings
 app.set("views", path.join(__dirname, "views"));
