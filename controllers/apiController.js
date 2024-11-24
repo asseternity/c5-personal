@@ -137,6 +137,19 @@ const getAllUserMessages = async (req, res, next) => {
   }
 };
 
+const postGuest = async (req, res, next) => {
+  try {
+    const testUser = await prisma.user.findUnique({
+      where: {
+        username: "TestUser",
+      },
+    });
+    return res.json(testUser);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   getIndex,
   postLogIn,
@@ -144,4 +157,5 @@ module.exports = {
   getMessage,
   postMessage,
   getAllUserMessages,
+  postGuest,
 };
