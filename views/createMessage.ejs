@@ -13,7 +13,7 @@
       <label for="name">Message title</label>
       <input type="text" id="name" name="name" />
       <label for="text">Message text</label>
-      <input type="text" id="text" name="text" />
+      <textarea id="text" name="text" rows="10" cols="50"></textarea>
       <% for (let i = 0; i < users.length; i++) { %>
       <label>
         <input type="checkbox" name="recipientId" value="<%= users[i].id %>" />
