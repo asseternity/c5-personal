@@ -127,6 +127,9 @@ const getAllUserMessages = async (req, res, next) => {
         where: {
           userId: req.body.user.id,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
       return res.json(allMessages);
     } catch (err) {
