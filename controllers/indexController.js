@@ -117,8 +117,12 @@ const getDeleteMessage = async (req, res, next) => {
     try {
       const allUsers = await prisma.user.findMany({
         include: {
-          messages: true,
-        }
+          messages: {
+            orderBy: {
+              createdAt: "asc", // Use 'desc' for descending order
+            },
+          },
+        },
       });
       res.render("deleteMessage", { user: req.user, allUsers: allUsers });
     } catch (err) {
